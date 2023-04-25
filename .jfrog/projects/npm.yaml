@@ -1,0 +1,8 @@
+version: 1
+type: npm
+resolver:
+  repo: reactcomponent-npm-dev-virtual
+  serverId: tomjfrog.jfrog.io
+deployer:
+  repo: reactcomponent-npm-dev-virtual
+  serverId: tomjfrog.jfrog.io
