@@ -1,5 +1,5 @@
 myRepo:
-  gitProvider: Github
+  gitProvider: Github_tomjfrog
   artifactory: jfrog_cloud
   path: tomjfrog/react-component
   virtualRepo: reactcomponent-npm-dev-virtual
