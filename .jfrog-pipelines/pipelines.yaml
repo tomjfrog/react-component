@@ -1,0 +1,45 @@
+#template: true   # required for local templates
+valuesFilePath: ./values.yml
+
+resources:
+  - name: git_repo
+    type: GitRepo
+    configuration:
+      # SCM integration where the repository is located
+      gitProvider: {{ .Values.myRepo.gitProvider }}
+      # Repository path, including org name/repo name
+      path: {{ .Values.myRepo.path }}
+      branches:
+        # Specifies which branches will trigger dependent steps
+        include: main
+
+  - name: npm_buildinfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: {{ .Values.myRepo.artifactory }}
+
+pipelines:
+  - name: react_component_pipeline
+    steps:
+      - name: npm_build_step
+        type: NpmBuild
+        configuration:
+          repositoryName: {{ .Values.myRepo.virtualRepo }}      # required, npm repository name on artifacctory
+          sourceLocation: .      # required, location of package.json file
+          integrations:
+            - name:  {{ .Values.myRepo.artifactory }}  # required
+          inputResources:
+            - name: git_repo         # required
+
+      - name: npm_publish_step
+        type: NpmPublish
+        configuration:
+          # for payloadType npm:
+          repositoryName: {{ .Values.myRepo.virtualRepo }}        # required, npm repository name on artifactory
+          autoPublishBuildInfo: true       # optional
+          integrations:
+            - name: {{ .Values.myRepo.artifactory }}      # required
+          inputSteps:
+            - name: npm_build_step                # required
+          outputResources:
+            - name: npm_buildinfo                 # optional
