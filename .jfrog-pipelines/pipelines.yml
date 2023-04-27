@@ -2,7 +2,7 @@
 valuesFilePath: ./values.yml
 
 resources:
-  - name: git_repo
+  - name: {{ .Values.projectPrefix }}_git_repo
     type: GitRepo
     configuration:
       # SCM integration where the repository is located
@@ -13,15 +13,15 @@ resources:
         # Specifies which branches will trigger dependent steps
         include: main
 
-  - name: npm_buildinfo
+  - name: {{ .Values.projectPrefix }}_npm_build_info
     type: BuildInfo
     configuration:
       sourceArtifactory: {{ .Values.myRepo.artifactory }}
 
 pipelines:
-  - name: react_component_pipeline
+  - name: {{ .Values.projectPrefix }}_pipeline
     steps:
-      - name: npm_build_step
+      - name: {{ .Values.projectPrefix }}_npm_build_step
         type: NpmBuild
         configuration:
           repositoryName: {{ .Values.myRepo.virtualRepo }}      # required, npm repository name on artifacctory
@@ -31,7 +31,7 @@ pipelines:
           inputResources:
             - name: git_repo         # required
 
-      - name: npm_publish_step
+      - name: {{ .Values.projectPrefix }}_npm_publish_step
         type: NpmPublish
         configuration:
           # for payloadType npm:
@@ -40,6 +40,6 @@ pipelines:
           integrations:
             - name: {{ .Values.myRepo.artifactory }}      # required
           inputSteps:
-            - name: npm_build_step                # required
+            - name: {{ .Values.projectPrefix }}_npm_build_step                # required
           outputResources:
-            - name: npm_buildinfo                 # optional
+            - name: {{ .Values.projectPrefix }}_npm_build_info                 # optional

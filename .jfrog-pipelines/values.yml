@@ -1,3 +1,4 @@
+projectPrefix: reactcomponent
 myRepo:
   gitProvider: Github_tomjfrog
   artifactory: jfrog_cloud
