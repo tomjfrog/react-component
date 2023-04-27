@@ -29,7 +29,7 @@ pipelines:
           integrations:
             - name:  {{ .Values.myRepo.artifactory }}  # required
           inputResources:
-            - name: git_repo         # required
+            - name: {{ .Values.projectPrefix }}_git_repo         # required
 
       - name: {{ .Values.projectPrefix }}_npm_publish_step
         type: NpmPublish
